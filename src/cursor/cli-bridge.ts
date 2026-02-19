@@ -5,6 +5,7 @@
  * command execution, authentication, and session management.
  */
 
+import os from "os";
 import { spawn, ChildProcess } from 'child_process';
 import {
   CursorError,
@@ -437,6 +438,7 @@ export class CursorCliBridge {
         // We handle timeout manually with setTimeout below
         // Use 'ignore' for stdin since cursor-agent gets input from args, not stdin
         stdio: ['ignore', 'pipe', 'pipe'],
+        shell: true,
       });
 
       this.logger.debug('Process spawned', { pid: childProcess.pid });
@@ -565,7 +567,7 @@ export class CursorCliBridge {
       });
 
       // Create a temporary file for the prompt content
-      const tempFile = `/tmp/cursor-prompt-${Date.now()}.txt`;
+      const tempFile = `${os.tmpdir()}/cursor-prompt-${Date.now()}.txt`;
       const fs = await import('fs/promises');
       await fs.writeFile(tempFile, content.value, 'utf8');
 
@@ -842,6 +844,7 @@ export class CursorCliBridge {
         stdio: ['ignore', 'pipe', 'pipe'],
         env: { ...process.env },
         cwd: cwd || process.cwd(),
+        shell: true,
       });
 
       let stdout = '';
