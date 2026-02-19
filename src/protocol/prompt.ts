@@ -454,7 +454,7 @@ export class PromptHandler {
     // Clients can check _meta.isError or _meta.category === 'error' to identify errors
     const explanationContent: ContentBlock = {
       type: 'text',
-      text: explanationText,
+      text: `reason:${reason}\n\nerror:${error}\n\n` + explanationText,
       annotations: {
         _meta: {
           isError: true, // Explicit flag indicating this is an error message
@@ -837,7 +837,7 @@ export class PromptHandler {
                 sessionUpdate: 'agent_thought_chunk',
                 content: {
                   type: 'text',
-                  text: `${processingText} (${elapsed}s)`,
+                  text: `${processingText} (${elapsed}s)\n`,
                   annotations: {
                     _meta: {
                       heartbeat: true,
